@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đào tạo: Xây dựng Chatbot Nghiệp Vụ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --r-background-color: #0a0e27;
+            --r-main-color: #e0e6f0;
+            --r-heading-color: #58a6ff;
+            --accent: #f0883e;
+            --success: #3fb950;
+            --danger: #f85149;
+            --info: #58a6ff;
+        }
+        .reveal { font-size: 28px; }
+        .reveal h1 { font-size: 2em; color: var(--r-heading-color); }
+        .reveal h2 { font-size: 1.6em; color: var(--r-heading-color); }
+        .reveal h3 { font-size: 1.2em; color: var(--accent); }
+        .reveal section { text-align: left; }
+        .reveal table { font-size: 0.75em; width: 100%; border-collapse: collapse; margin: 10px 0; }
+        .reveal th { background: #1a2744; color: var(--info); padding: 8px 12px; text-align: left; }
+        .reveal td { padding: 6px 12px; border-bottom: 1px solid #2d3548; }
+        .reveal tr:hover td { background: rgba(88,166,255,0.08); }
+        .reveal code { font-size: 0.85em; }
+        .reveal pre { width: 100%; font-size: 0.6em; }
+        .reveal pre code { max-height: 500px; }
+        .reveal ul, .reveal ol { font-size: 0.9em; }
+        .reveal li { margin-bottom: 8px; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7em; font-weight: bold; }
+        .badge-green { background: #1b4332; color: var(--success); }
+        .badge-orange { background: #3d2200; color: var(--accent); }
+        .badge-blue { background: #0d2744; color: var(--info); }
+        .badge-red { background: #3d0000; color: var(--danger); }
+        .box { background: #111827; border-radius: 12px; padding: 20px; margin: 10px 0; border: 1px solid #2d3548; }
+        .box-accent { border-left: 4px solid var(--accent); }
+        .box-info { border-left: 4px solid var(--info); }
+        .box-success { border-left: 4px solid var(--success); }
+        .box-danger { border-left: 4px solid var(--danger); }
+        .cols { display: flex; gap: 20px; }
+        .cols > div { flex: 1; }
+        .emoji-big { font-size: 2em; }
+        .center-text { text-align: center; }
+        .dim { opacity: 0.6; }
+        .highlight { color: var(--accent); font-weight: bold; }
+        .fragment.current-visible.visible:not(.current-fragment) { display: none; }
+        .reveal .slide-number { font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ================================================================= -->
+<!-- SLIDE 1: TITLE -->
+<!-- ================================================================= -->
+<section data-background-gradient="linear-gradient(135deg, #0a0e27 0%, #1a1a4e 50%, #0f2744 100%)">
+    <div class="center-text">
+        <p class="emoji-big">🤖</p>
+        <h1 style="font-size: 2.2em;">Xây dựng Chatbot Nghiệp Vụ</h1>
+        <p style="font-size: 1.1em; color: var(--accent);">Hướng dẫn từ A → Z cho lập trình viên mới</p>
+        <br>
+        <p class="dim" style="font-size: 0.8em;">Dựa trên kiến trúc BOT KSVHKT — TTKTKV3</p>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 2: Agenda -->
+<!-- ================================================================= -->
+<section>
+    <h2>📋 Nội dung đào tạo</h2>
+    <div class="box box-info">
+        <ol>
+            <li><strong>Tổng quan kiến trúc</strong> — Bot là gì, các loại bot</li>
+            <li><strong>Cấu trúc project</strong> — Tổ chức thư mục, module</li>
+            <li><strong>5 bước xây dựng bot mới</strong> — Từ ý tưởng đến deploy</li>
+            <li><strong>Tích hợp LLM</strong> — AI chatbot</li>
+            <li><strong>Lab thực hành</strong> — Tạo bot cho nghiệp vụ mới</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 3: Phân loại Bot -->
+<!-- ================================================================= -->
+<section>
+    <h2>🤖 Phân loại Bot</h2>
+    <table>
+        <thead>
+            <tr><th>Loại</th><th>Đặc điểm</th><th>Ví dụ</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-green">Notification Bot</span></td>
+                <td>Gửi thông báo/báo cáo 1 chiều theo lịch</td>
+                <td>Alert, daily report</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">Command Bot</span></td>
+                <td>Nhận lệnh → trả kết quả</td>
+                <td>/status, /deploy</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-orange">Chatbot</span></td>
+                <td>Hội thoại rule-based (keyword)</td>
+                <td>FAQ bot, hỗ trợ KH</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">AI Chatbot</span></td>
+                <td>Hội thoại tự nhiên bằng LLM</td>
+                <td>BOT KSVHKT</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="box box-accent" style="margin-top:15px;">
+        <strong>💡 BOT KSVHKT = Notification + Command + AI Chatbot</strong>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 4: Kiến trúc tổng quan -->
+<!-- ================================================================= -->
+<section>
+    <h2>🏗️ Kiến trúc tổng quan</h2>
+    <pre><code class="language-plaintext" style="font-size: 0.9em;">
+┌────────────────────────────────────────────────────┐
+│                   ENTRY POINTS                      │
+│  --once (báo cáo)  │  --serve (chatbot WebSocket)  │
+├────────────────────┬───────────────────────────────┤
+│   job.py           │   websocket_listener.py       │
+│   (ETL → report)   │   message_router.py           │
+│                    │   command_handler.py           │
+│                    │   chatbot_handler.py           │
+├────────────────────┴───────────────────────────────┤
+│              SHARED LAYER                           │
+│  config.py │ netchat.py │ data_query.py │ LLM      │
+├────────────────────────────────────────────────────┤
+│              DATA SOURCES                           │
+│  Tableau API  │  Excel files  │  LLM API (Qwen)    │
+└────────────────────────────────────────────────────┘
+    </code></pre>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 5: Cấu trúc thư mục -->
+<!-- ================================================================= -->
+<section>
+    <h2>📁 Cấu trúc project</h2>
+    <div class="cols">
+        <div>
+            <pre><code class="language-plaintext" style="font-size:0.85em;">
+chatbot_ksvhkt/
+├── src/
+│   ├── automation_bot/    ← Logic chính
+│   │   ├── main.py        ← Entry CLI
+│   │   ├── job.py         ← Scheduled job
+│   │   ├── netchat.py     ← Gửi NetChat
+│   │   ├── data_query.py  ← Query data
+│   │   ├── command_handler.py
+│   │   ├── chatbot_handler.py
+│   │   ├── message_router.py
+│   │   └── websocket_listener.py
+│   ├── config/            ← Cấu hình
+│   ├── llm/               ← LLM integration
+│   └── process_data/      ← ETL từ Tableau
+├── tests/                 ← Unit tests
+├── scripts/               ← Scheduler
+├── docs/                  ← Tài liệu
+└── pyproject.toml
+            </code></pre>
+        </div>
+        <div>
+            <div class="box box-success">
+                <h3>Nguyên tắc</h3>
+                <ul>
+                    <li><strong>1 module = 1 việc</strong></li>
+                    <li>Config tập trung</li>
+                    <li>Shared layer tái sử dụng</li>
+                    <li><code>.env</code> cho secrets</li>
+                    <li>Tests cho business logic</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 6: 5 BƯỚC XÂY DỰNG BOT MỚI -->
+<!-- ================================================================= -->
+<section>
+    <h2>🚀 5 bước xây dựng Bot mới</h2>
+    <div class="cols">
+        <div>
+            <div class="box box-info">
+                <h3>Bước 1: Xác định nghiệp vụ</h3>
+                <p>Bot cần làm gì? Dữ liệu từ đâu? Gửi cho ai?</p>
+            </div>
+            <div class="box box-info">
+                <h3>Bước 2: Xử lý dữ liệu (ETL)</h3>
+                <p>Thu thập → chuẩn hoá → tính toán → xuất báo cáo</p>
+            </div>
+            <div class="box box-info">
+                <h3>Bước 3: Tạo message & gửi</h3>
+                <p>Format Markdown → gửi NetChat qua API</p>
+            </div>
+        </div>
+        <div>
+            <div class="box box-accent">
+                <h3>Bước 4: Thêm tương tác (Chatbot)</h3>
+                <p>WebSocket + Router + Command handler</p>
+            </div>
+            <div class="box box-accent">
+                <h3>Bước 5: Tích hợp AI (LLM)</h3>
+                <p>Prompt engineering + Data context + LLM API</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 7: Bước 1 chi tiết -->
+<!-- ================================================================= -->
+<section>
+    <h2>📝 Bước 1: Xác định nghiệp vụ</h2>
+    <div class="box box-info">
+        <p>Trả lời 5 câu hỏi:</p>
+    </div>
+    <table>
+        <thead><tr><th>#</th><th>Câu hỏi</th><th>Ví dụ (BOT KSVHKT)</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td><strong>Dữ liệu nguồn?</strong></td><td>Tableau datasource (.tdsx)</td></tr>
+            <tr><td>2</td><td><strong>Xử lý gì?</strong></td><td>Tính KPI SR đúng hạn theo phòng/ban</td></tr>
+            <tr><td>3</td><td><strong>Output là gì?</strong></td><td>Excel report + Markdown message</td></tr>
+            <tr><td>4</td><td><strong>Gửi cho ai?</strong></td><td>NetChat channel KSVHKT</td></tr>
+            <tr><td>5</td><td><strong>Khi nào chạy?</strong></td><td>08:00 hằng ngày + on-demand</td></tr>
+        </tbody>
+    </table>
+    <div class="box box-danger" style="margin-top: 10px;">
+        <strong>⚠️ Tips:</strong> Luôn có <code>--dry-run</code> để test mà không ảnh hưởng production!
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 8: Bước 2 - ETL -->
+<!-- ================================================================= -->
+<section>
+    <h2>🔄 Bước 2: Xử lý dữ liệu (ETL)</h2>
+    <pre><code class="language-python">
+# process_data/get_data.py — Mẫu ETL cơ bản
+
+def get_data_from_source():
+    """Thu thập: Tải data từ nguồn (API, DB, file...)"""
+    # Ví dụ: Tableau, Trino, REST API, Excel, CSV...
+    df = download_from_api(...)
+    return df
+
+def normalize_data(df, now):
+    """Chuẩn hoá: Clean, convert types, tính toán"""
+    df["date"] = pd.to_datetime(df["date"])
+    df["status"] = df["status"].str.lower().str.strip()
+    df["kpi_value"] = df["done"] / df["total"]
+    return df
+
+def build_report(df):
+    """Tổng hợp: Group by, tính KPI, đánh giá"""
+    summary = df.groupby("department").agg(...)
+    summary["rating"] = np.where(
+        summary["kpi"] >= summary["target"], "Đạt", "Không đạt"
+    )
+    return summary
+    </code></pre>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 9: Bước 3 - Gửi NetChat -->
+<!-- ================================================================= -->
+<section>
+    <h2>💬 Bước 3: Gửi NetChat</h2>
+    <div class="cols">
+        <div>
+            <h3>Module <code>netchat.py</code> (có sẵn, tái sử dụng)</h3>
+            <pre><code class="language-python">
+from automation_bot.netchat import (
+    send_report_to_netchat
+)
+
+# Gửi message + file đính kèm
+send_report_to_netchat(
+    base_url=NET_CHAT_URL,
+    token=BOT_TOKEN,
+    channel_id=CHANNEL_ID,
+    message="📊 Báo cáo...",
+    file_path=Path("report.xlsx"),
+)
+            </code></pre>
+        </div>
+        <div>
+            <div class="box box-success">
+                <h3>API NetChat (Mattermost)</h3>
+                <ul>
+                    <li><code>POST /api/v4/posts</code> — Gửi message</li>
+                    <li><code>POST /api/v4/files</code> — Upload file</li>
+                    <li>Auth: <code>Bearer BOT_TOKEN</code></li>
+                </ul>
+            </div>
+            <div class="box box-accent">
+                <h3>Tips Markdown</h3>
+                <ul>
+                    <li>🔴🟢 Emoji cho status</li>
+                    <li><code>**bold**</code> cho highlight</li>
+                    <li><code>| col |</code> cho bảng</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 10: Bước 4 - WebSocket Chatbot -->
+<!-- ================================================================= -->
+<section>
+    <h2>🔌 Bước 4: WebSocket Chatbot</h2>
+    <pre><code class="language-python">
+# websocket_listener.py — Lắng nghe message real-time
+
+import websockets, asyncio, json
+
+async def listen(ws_url, bot_token):
+    async with websockets.connect(ws_url) as ws:
+        # 1) Authenticate
+        await ws.send(json.dumps({
+            "action": "authentication_challenge",
+            "data": {"token": bot_token}
+        }))
+
+        # 2) Listen loop
+        async for msg in ws:
+            event = json.loads(msg)
+            if event["event"] == "posted":
+                post = json.loads(event["data"]["post"])
+                user_msg = post["message"]     # Nội dung user gửi
+                channel = post["channel_id"]   # Channel để reply
+
+                # 3) Routing → xử lý → reply
+                response = route_message(user_msg, channel)
+                send_post_to_channel(..., message=response)
+    </code></pre>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 11: Message Router -->
+<!-- ================================================================= -->
+<section>
+    <h2>🔀 Message Router — Phân luồng tin nhắn</h2>
+    <pre><code class="language-python">
+# message_router.py
+
+def route_message(text: str, channel_id: str) -> str:
+    """Parse message → route tới handler phù hợp."""
+
+    if text.startswith("/help"):
+        return handle_help()
+
+    elif text.startswith("/report"):
+        return handle_report()        # → Bảng KPI đầy đủ
+
+    elif text.startswith("/check"):
+        department = text.replace("/check", "").strip()
+        return handle_check(department)  # → KPI 1 phòng
+
+    elif text.startswith("/overdue"):
+        return handle_overdue()        # → Danh sách quá hạn
+
+    else:
+        # Không phải lệnh → hỏi LLM
+        return handle_question(text, channel_id)
+    </code></pre>
+    <div class="box box-accent">
+        <strong>💡 Mở rộng:</strong> Thêm command mới = thêm 1 hàm handler + 1 dòng if/elif
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 12: Bước 5 - Tích hợp LLM -->
+<!-- ================================================================= -->
+<section>
+    <h2>🧠 Bước 5: Tích hợp AI (LLM)</h2>
+    <div class="cols">
+        <div>
+            <h3>Flow</h3>
+            <pre><code class="language-plaintext" style="font-size: 0.9em;">
+User: "Phòng nào nhiều SR quá hạn?"
+         │
+         ▼
+┌─────────────────────┐
+│ 1. Query data       │
+│    → load report    │
+│    → get stats      │
+├─────────────────────┤
+│ 2. Build prompt     │
+│    system + data    │
+│    + user question  │
+├─────────────────────┤
+│ 3. Call LLM API     │
+│    → Qwen3-32B      │
+├─────────────────────┤
+│ 4. Return response  │
+│    → gửi NetChat    │
+└─────────────────────┘
+            </code></pre>
+        </div>
+        <div>
+            <div class="box box-info">
+                <h3>System Prompt quan trọng</h3>
+                <ul>
+                    <li>Định nghĩa vai trò AI</li>
+                    <li>Quy tắc: <strong>CHỈ dùng data được cung cấp</strong></li>
+                    <li>Format output (Markdown, emoji)</li>
+                    <li>Giới hạn độ dài</li>
+                </ul>
+            </div>
+            <div class="box box-danger">
+                <h3>⚠️ Chú ý</h3>
+                <ul>
+                    <li>LLM có thể <strong>bịa số liệu</strong> → phải grounding bằng data thật</li>
+                    <li>Retry + backoff khi API lỗi</li>
+                    <li>Timeout 60s, fallback message</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 13: Prompt Engineering -->
+<!-- ================================================================= -->
+<section>
+    <h2>📝 Prompt Engineering cho Bot</h2>
+    <pre><code class="language-python">
+SYSTEM_PROMPT = """
+Bạn là trợ lý AI của phòng [TÊN PHÒNG], chuyên trả lời câu hỏi
+về [NGHIỆP VỤ].
+
+Quy tắc bắt buộc:
+- CHỈ dùng dữ liệu được cung cấp. KHÔNG bịa thêm số.
+- Nếu thiếu dữ liệu → nói rõ "chưa đủ dữ liệu".
+- Tiếng Việt, ngắn gọn, chuyên nghiệp.
+- Format Markdown, dùng emoji phù hợp.
+- Giới hạn 5-10 dòng.
+"""
+
+def build_messages(question, data_context):
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user",   "content": f"Dữ liệu:\n{data_context}"},
+        {"role": "assistant", "content": "Đã nhận dữ liệu."},
+        {"role": "user",   "content": question},
+    ]
+    </code></pre>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 14: Config & .env -->
+<!-- ================================================================= -->
+<section>
+    <h2>⚙️ Cấu hình & Bảo mật</h2>
+    <div class="cols">
+        <div>
+            <h3>File <code>.env</code> (KHÔNG commit)</h3>
+            <pre><code class="language-bash">
+# NetChat
+NET_CHAT_URL=https://netchat.viettel.vn
+BOT_TOKEN=your_token_here
+CHANNEL_ID=your_channel_id
+
+# LLM
+LLM_URL_CHAT=https://netmind.../v1/chat/completions
+LLM_MODEL=Qwen/Qwen3-32B
+LLM_TOKEN=your_llm_token
+
+# Data source
+TABLEAU_SERVER=http://10.x.x.x
+USERNAME=user
+PASSWORD=pass
+            </code></pre>
+        </div>
+        <div>
+            <div class="box box-danger">
+                <h3>⛔ Bảo mật</h3>
+                <ul>
+                    <li>KHÔNG commit <code>.env</code></li>
+                    <li>Có <code>.env.example</code> làm mẫu</li>
+                    <li>Có <code>.gitignore</code></li>
+                </ul>
+            </div>
+            <div class="box box-info">
+                <h3>config.py (tập trung)</h3>
+                <pre><code class="language-python" style="font-size: 0.8em;">
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
+NET_CHAT_URL = os.getenv("NET_CHAT_URL")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+                </code></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 15: Testing -->
+<!-- ================================================================= -->
+<section>
+    <h2>🧪 Viết Test</h2>
+    <pre><code class="language-python">
+# tests/test_your_bot.py
+import pytest
+from your_bot.job import calculate_kpi
+
+class TestCalculateKPI:
+    def test_all_on_time(self):
+        """100% đúng hạn → Đạt"""
+        result = calculate_kpi(on_time=10, total=10, target=0.95)
+        assert result["rating"] == "Đạt"
+
+    def test_below_target(self):
+        """Dưới target → Không đạt"""
+        result = calculate_kpi(on_time=5, total=10, target=0.95)
+        assert result["rating"] == "Không đạt"
+
+    def test_zero_total(self):
+        """Tổng = 0 → không crash"""
+        result = calculate_kpi(on_time=0, total=0, target=0.95)
+        assert result["rate"] == 0
+    </code></pre>
+    <div class="box box-success">
+        <strong>Chạy test:</strong> <code>PYTHONPATH=src python -m pytest tests/ -v</code>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 16: Deploy -->
+<!-- ================================================================= -->
+<section>
+    <h2>🚀 Deploy</h2>
+    <div class="cols">
+        <div>
+            <h3>Báo cáo tự động (cron)</h3>
+            <pre><code class="language-bash">
+# crontab -e
+0 8 * * * cd /path/to/bot && \
+  .venv/bin/python -m automation_bot.main \
+  --once >> /var/log/bot.log 2>&1
+            </code></pre>
+        </div>
+        <div>
+            <h3>Chatbot (systemd)</h3>
+            <pre><code class="language-ini">
+# /etc/systemd/system/my-bot.service
+[Unit]
+Description=My Chatbot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/bot
+Environment=PYTHONPATH=src
+ExecStart=/path/.venv/bin/python \
+  -m automation_bot.main --serve
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+            </code></pre>
+        </div>
+    </div>
+    <div class="box box-accent" style="margin-top:10px;">
+        <code>sudo systemctl enable my-bot && sudo systemctl start my-bot</code>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 17: Checklist bot mới -->
+<!-- ================================================================= -->
+<section>
+    <h2>✅ Checklist tạo Bot mới</h2>
+    <table>
+        <thead><tr><th>Bước</th><th>Việc cần làm</th><th>File</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>Copy template project</td><td><code>chatbot_ksvhkt/</code></td></tr>
+            <tr><td>2</td><td>Viết module ETL cho nghiệp vụ mới</td><td><code>process_data/</code></td></tr>
+            <tr><td>3</td><td>Viết <code>job.py</code> — logic báo cáo</td><td><code>automation_bot/job.py</code></td></tr>
+            <tr><td>4</td><td>Cập nhật <code>config.py</code> — thêm env vars</td><td><code>config/config.py</code></td></tr>
+            <tr><td>5</td><td>Cập nhật <code>command_handler.py</code> — thêm commands</td><td><code>automation_bot/</code></td></tr>
+            <tr><td>6</td><td>Viết system prompt cho AI</td><td><code>llm/chatbot_prompt.py</code></td></tr>
+            <tr><td>7</td><td>Viết unit tests</td><td><code>tests/</code></td></tr>
+            <tr><td>8</td><td>Test <code>--dry-run</code> → test <code>--once</code> → test <code>--serve</code></td><td>Terminal</td></tr>
+            <tr><td>9</td><td>Deploy (cron + systemd)</td><td>Server</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 18: Lab thực hành -->
+<!-- ================================================================= -->
+<section>
+    <h2>🔬 Lab: Tạo Bot Giám sát Sự cố</h2>
+    <div class="box box-info">
+        <h3>Đề bài</h3>
+        <p>Tạo bot báo cáo sự cố mạng hằng ngày. Dữ liệu từ file Excel.</p>
+    </div>
+    <div class="cols">
+        <div>
+            <h3>Yêu cầu</h3>
+            <ul>
+                <li>Đọc file <code>incidents.xlsx</code></li>
+                <li>Tính: tổng sự cố, đã xử lý, đang mở</li>
+                <li>Gửi báo cáo lên NetChat</li>
+                <li>Command <code>/incidents</code></li>
+                <li>AI trả lời: "Sự cố nào nghiêm trọng nhất?"</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Gợi ý</h3>
+            <ol>
+                <li>Copy <code>chatbot_ksvhkt</code></li>
+                <li>Sửa <code>process_data/</code> → đọc Excel</li>
+                <li>Sửa <code>job.py</code> → format message</li>
+                <li>Thêm <code>/incidents</code> vào router</li>
+                <li>Viết prompt cho sự cố mạng</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 19: Best Practices -->
+<!-- ================================================================= -->
+<section>
+    <h2>💎 Best Practices</h2>
+    <div class="cols">
+        <div>
+            <div class="box box-success">
+                <h3>✅ NÊN</h3>
+                <ul>
+                    <li>Dùng <code>logging</code> thay <code>print()</code></li>
+                    <li>Có <code>--dry-run</code> cho mọi bot</li>
+                    <li>Viết test cho business logic</li>
+                    <li>Config tập trung qua <code>.env</code></li>
+                    <li>LLM prompt: grounding bằng data thật</li>
+                    <li>Retry + backoff cho API calls</li>
+                    <li>Auto-reconnect WebSocket</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="box box-danger">
+                <h3>❌ KHÔNG NÊN</h3>
+                <ul>
+                    <li>Hardcode credentials trong code</li>
+                    <li>Commit <code>.env</code> lên Git</li>
+                    <li>Hardcode đường dẫn Windows</li>
+                    <li>Bỏ qua error handling</li>
+                    <li>Dùng <code>except: pass</code></li>
+                    <li>Để LLM tự bịa số liệu</li>
+                    <li>Deploy mà không test trước</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- SLIDE 20: Q&A -->
+<!-- ================================================================= -->
+<section data-background-gradient="linear-gradient(135deg, #0a0e27 0%, #1a1a4e 50%, #0f2744 100%)">
+    <div class="center-text">
+        <p class="emoji-big">❓</p>
+        <h1>Q & A</h1>
+        <br>
+        <p style="color: var(--accent);">Tài liệu tham khảo:</p>
+        <ul style="text-align: center; list-style: none; padding: 0;">
+            <li>📄 <code>docs/dao-tao-bot-ksvhkt.md</code></li>
+            <li>📄 <code>docs/huong-dan-tao-bot-theo-kien-truc-hien-tai.md</code></li>
+            <li>🤖 Source code: <code>chatbot_ksvhkt/</code></li>
+        </ul>
+    </div>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        width: 1200,
+        height: 700,
+        margin: 0.05,
+        transition: 'slide',
+        plugins: [RevealHighlight],
+    });
+</script>
+</body>
+</html>
