@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hướng Dẫn Xây Dựng & Deploy SR Report Bot</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/dracula.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/monokai.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Thư viện local (hoạt động offline, không cần internet) -->
+    <link rel="stylesheet" href="libs/css/reset.min.css">
+    <link rel="stylesheet" href="libs/css/reveal.min.css">
+    <link rel="stylesheet" href="libs/css/dracula.min.css">
+    <link rel="stylesheet" href="libs/css/monokai.min.css">
+    <link rel="stylesheet" href="libs/fonts/fonts_local.css">
 
     <style>
         /* ===== CSS VARIABLES ===== */
@@ -626,9 +625,9 @@ WantedBy=multi-user.target
     </div>
 
     <!-- ===== SCRIPTS ===== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="libs/js/reveal.min.js"></script>
+    <script src="libs/js/highlight.min.js"></script>
+    <script src="libs/js/mermaid.min.js"></script>
 
     <script>
         // ---- Init Mermaid (startOnLoad:false to avoid render in hidden slide) ----
