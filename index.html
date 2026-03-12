@@ -54,7 +54,7 @@
 
         /* Slide spacing (bottom clears controls bar) */
         .reveal .slides {
-            padding-bottom: calc(var(--ctrl-h) + 28px);
+            padding-bottom: calc(var(--ctrl-h) + 16px);
         }
 
         /* Headings */
@@ -66,22 +66,22 @@
         }
 
         .reveal h2 {
-            font-size: clamp(1.4em, 4vw, 2em);
+            font-size: clamp(1.1em, 2.6vw, 1.5em);
             background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 28px;
+            margin-bottom: 14px;
             filter: drop-shadow(0 2px 12px rgba(167,139,250,.35));
         }
 
         .reveal p, .reveal ul, .reveal ol, .reveal li {
             color: var(--text);
-            font-size: clamp(0.82em, 2.2vw, 1.05em);
-            line-height: 1.7;
+            font-size: clamp(0.78em, 1.8vw, 0.95em);
+            line-height: 1.55;
         }
 
-        .reveal li { margin-bottom: 12px; }
+        .reveal li { margin-bottom: 8px; }
 
         .reveal strong {
             color: var(--accent-3);
@@ -103,10 +103,10 @@
         .reveal .box-content {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: clamp(18px, 3vw, 40px) clamp(18px, 4vw, 48px);
+            border-radius: 16px;
+            padding: clamp(12px, 2vw, 24px) clamp(14px, 3vw, 36px);
             box-shadow:
-                0 24px 60px rgba(0,0,0,.55),
+                0 16px 40px rgba(0,0,0,.55),
                 0 1px 0 rgba(255,255,255,.07) inset;
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
@@ -126,10 +126,10 @@
 
         /* ===== CODE BLOCKS ===== */
         .reveal pre {
-            box-shadow: 0 16px 40px rgba(0,0,0,.65);
-            border-radius: 14px;
+            box-shadow: 0 10px 28px rgba(0,0,0,.65);
+            border-radius: 10px;
             border: 1px solid var(--border);
-            margin: 20px 0 0;
+            margin: 10px 0 0;
             position: relative;
             overflow: hidden;
         }
@@ -144,9 +144,9 @@
 
         .reveal pre code {
             font-family: 'Fira Code', monospace;
-            font-size: clamp(.72em, 1.8vw, 1.1em);
-            line-height: 1.55;
-            padding: 20px 24px;
+            font-size: clamp(.65em, 1.4vw, 0.88em);
+            line-height: 1.45;
+            padding: 12px 18px;
         }
 
         /* ===== MERMAID ===== */
@@ -291,8 +291,9 @@
         /* ===== RESPONSIVE ===== */
         /* Tablet */
         @media (max-width: 900px) {
-            .reveal h2 { font-size: 1.6em; }
-            .reveal .box-content { padding: 20px 22px; }
+            .reveal h2 { font-size: 1.35em; margin-bottom: 12px; }
+            .reveal .box-content { padding: 14px 18px; }
+            .reveal pre code { font-size: .75em; padding: 10px 14px; }
         }
 
         /* Mobile */
@@ -640,7 +641,10 @@ WantedBy=multi-user.target
             plugins: [ RevealHighlight ],
             transition: 'slide',
             backgroundTransition: 'fade',
-            controlsTutorial: false
+            controlsTutorial: false,
+            margin: 0.04,
+            minScale: 0.3,
+            maxScale: 1.5
         }).then(() => {
             // After Reveal is ready, render Mermaid diagrams on visible slide
             renderMermaidIfVisible();
